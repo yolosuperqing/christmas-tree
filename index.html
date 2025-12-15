@@ -2,29 +2,31 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>圣诞树</title>
+<title>圣诞快乐 🎄</title>
 
 <style>
-    body {
+    html, body {
         margin: 0;
+        width: 100%;
+        height: 100%;
         background: black;
         overflow: hidden;
         font-family: Consolas, "Courier New", monospace;
-        color: white;
     }
 
-    .container {
-        height: 100vh;
+    /* 屏幕真正居中 */
+    body {
         display: flex;
         justify-content: center;
         align-items: center;
-        position: relative;
     }
 
     .tree {
         white-space: pre;
-        line-height: 1.2;
-        font-size: 16px;
+        line-height: 1.15;
+        font-size: 22px;          /* 🌲 放大关键 */
+        text-align: left;
+        user-select: none;
         z-index: 2;
     }
 
@@ -49,11 +51,12 @@
     /* ❄ 雪花 */
     .snowflake {
         position: fixed;
-        top: -10px;
+        top: -20px;
         color: white;
-        opacity: 0.8;
+        opacity: 0.85;
         pointer-events: none;
         animation: fall linear infinite;
+        z-index: 1;
     }
 
     @keyframes fall {
@@ -71,41 +74,29 @@
     <source src="https://cdn.pixabay.com/audio/2022/12/02/audio_6f5d1b9c1c.mp3" type="audio/mpeg">
 </audio>
 
-<div class="container">
-    <div id="tree" class="tree"></div>
-</div>
+<div id="tree" class="tree"></div>
 
 <script>
-    const height = 12;
+    /* 🌲 树高度（越大越震撼） */
+    const height = 22;
+
+    const colors = ["green", "light-green", "cyan", "light-cyan"];
+    const balls  = ["ball-red", "ball-blue", "ball-yellow", "ball-pink"];
+
     const tree = document.getElementById("tree");
-
-    const colors = [
-        "green",
-        "light-green",
-        "cyan",
-        "light-cyan"
-    ];
-
-    const balls = [
-        "ball-red",
-        "ball-blue",
-        "ball-yellow",
-        "ball-pink"
-    ];
-
     let output = "";
 
     // ⭐ 星星
-    output += " ".repeat(height - 1) +
-        "<span class='yellow'>★</span>\n";
+    output += " ".repeat(height - 1)
+        + "<span class='yellow'>★</span>\n";
 
-    // 🌲 树身 + 🎈 装饰球
+    // 🌲 树身
     for (let i = 0; i < height; i++) {
         const spaces = " ".repeat(height - i - 1);
         let row = "";
 
         for (let j = 0; j < 2 * i + 1; j++) {
-            if (Math.random() < 0.2) {
+            if (Math.random() < 0.18) {
                 const ball = balls[Math.floor(Math.random() * balls.length)];
                 row += `<span class="${ball}">●</span>`;
             } else {
@@ -118,29 +109,29 @@
     }
 
     // 🪵 树干
-    for (let i = 0; i < 2; i++) {
-        output += " ".repeat(height - 2) +
-            "<span class='trunk'></span>\n";
+    for (let i = 0; i < 3; i++) {
+        output += " ".repeat(height - 2)
+            + "<span class='trunk'></span>\n";
     }
 
     tree.innerHTML = output;
 
-    // ❄ 雪花生成
+    /* ❄ 雪花 */
     function createSnowflake() {
         const snow = document.createElement("div");
         snow.className = "snowflake";
         snow.innerText = "❄";
         snow.style.left = Math.random() * window.innerWidth + "px";
-        snow.style.fontSize = (10 + Math.random() * 10) + "px";
-        snow.style.animationDuration = (5 + Math.random() * 5) + "s";
+        snow.style.fontSize = (14 + Math.random() * 14) + "px";
+        snow.style.animationDuration = (6 + Math.random() * 6) + "s";
 
         document.body.appendChild(snow);
-        setTimeout(() => snow.remove(), 10000);
+        setTimeout(() => snow.remove(), 12000);
     }
 
-    setInterval(createSnowflake, 200);
+    setInterval(createSnowflake, 180);
 
-    // 🎶 背景音乐播放（兼容浏览器限制）
+    /* 🎶 音乐（点击解锁） */
     const bgm = document.getElementById("bgm");
     bgm.volume = 0.4;
 
@@ -153,4 +144,3 @@
 
 </body>
 </html>
-
