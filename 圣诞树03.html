@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>圣诞树</title>
+
+<style>
+    body {
+        margin: 0;
+        background: black;
+        overflow: hidden;
+        font-family: Consolas, "Courier New", monospace;
+        color: white;
+    }
+
+    .container {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .tree {
+        white-space: pre;
+        line-height: 1.2;
+        font-size: 16px;
+        z-index: 2;
+    }
+
+    .yellow { color: gold; }
+    .green { color: #00ff00; }
+    .light-green { color: #66ff66; }
+    .cyan { color: cyan; }
+    .light-cyan { color: #66ffff; }
+
+    .ball-red { color: #ff4d4d; }
+    .ball-blue { color: #4da6ff; }
+    .ball-yellow { color: #ffd633; }
+    .ball-pink { color: #ff66cc; }
+
+    .trunk {
+        background: saddlebrown;
+        display: inline-block;
+        width: 3ch;
+        height: 1.2em;
+    }
+
+    /* ❄ 雪花 */
+    .snowflake {
+        position: fixed;
+        top: -10px;
+        color: white;
+        opacity: 0.8;
+        pointer-events: none;
+        animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+        to {
+            transform: translateY(110vh);
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<!-- 🎶 背景音乐 -->
+<audio id="bgm" loop>
+    <source src="https://cdn.pixabay.com/audio/2022/12/02/audio_6f5d1b9c1c.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+    <div id="tree" class="tree"></div>
+</div>
+
+<script>
+    const height = 12;
+    const tree = document.getElementById("tree");
+
+    const colors = [
+        "green",
+        "light-green",
+        "cyan",
+        "light-cyan"
+    ];
+
+    const balls = [
+        "ball-red",
+        "ball-blue",
+        "ball-yellow",
+        "ball-pink"
+    ];
+
+    let output = "";
+
+    // ⭐ 星星
+    output += " ".repeat(height - 1) +
+        "<span class='yellow'>★</span>\n";
+
+    // 🌲 树身 + 🎈 装饰球
+    for (let i = 0; i < height; i++) {
+        const spaces = " ".repeat(height - i - 1);
+        let row = "";
+
+        for (let j = 0; j < 2 * i + 1; j++) {
+            if (Math.random() < 0.2) {
+                const ball = balls[Math.floor(Math.random() * balls.length)];
+                row += `<span class="${ball}">●</span>`;
+            } else {
+                const color = colors[i % colors.length];
+                row += `<span class="${color}">*</span>`;
+            }
+        }
+
+        output += spaces + row + "\n";
+    }
+
+    // 🪵 树干
+    for (let i = 0; i < 2; i++) {
+        output += " ".repeat(height - 2) +
+            "<span class='trunk'></span>\n";
+    }
+
+    tree.innerHTML = output;
+
+    // ❄ 雪花生成
+    function createSnowflake() {
+        const snow = document.createElement("div");
+        snow.className = "snowflake";
+        snow.innerText = "❄";
+        snow.style.left = Math.random() * window.innerWidth + "px";
+        snow.style.fontSize = (10 + Math.random() * 10) + "px";
+        snow.style.animationDuration = (5 + Math.random() * 5) + "s";
+
+        document.body.appendChild(snow);
+        setTimeout(() => snow.remove(), 10000);
+    }
+
+    setInterval(createSnowflake, 200);
+
+    // 🎶 背景音乐播放（兼容浏览器限制）
+    const bgm = document.getElementById("bgm");
+    bgm.volume = 0.4;
+
+    bgm.play().catch(() => {
+        document.body.addEventListener("click", () => {
+            bgm.play();
+        }, { once: true });
+    });
+</script>
+
+</body>
+</html>
